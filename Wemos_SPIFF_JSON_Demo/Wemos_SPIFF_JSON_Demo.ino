@@ -48,10 +48,8 @@ void callback(String topic, byte* message, unsigned int length) {
 }
 
 void reconnect() {
-  // Loop until we're reconnected
   while (!client.connected()) {
     Serial.print("Attempting MQTT connection...");
-    // Attempt to connect
     if (client.connect(HostName)) {
       Serial.println("connected");
       client.subscribe(TopicUP);
@@ -62,7 +60,6 @@ void reconnect() {
       Serial.print(client.state());
       Serial.println(" try again in 5 seconds");
       digitalWrite(LED_BUILTIN, HIGH);
-      // Wait 5 seconds before retrying
       delay(5000);
     }
   }
@@ -81,6 +78,7 @@ void LoadSPIFF() {
   }
   //Reading of the JSON file
   String  test_string = test_file.readString();
+  
   //Deserialization to a ArduinoJSON file
   deserializeJson(TestSPIFF, test_string);
   test_file.close();
@@ -105,13 +103,13 @@ void LoadSPIFF() {
 
 void SaveSPIFF() {
   String test_string;
-  //Open the config.json file (Write Mode)
+  //Open the Test.json file (Write Mode)
   File test_file = SPIFFS.open("/Test.json", "w");
   if (!test_file) {
     Serial.println("Failed to open file (Writing mode)");
     return;
   }
-  //Serialize the ModulesInfos file to a JSON string
+  //Serialize the ArduinoJSON file to a JSON string
   serializeJson(TestSPIFF, test_string);
 
   //Save and close the JSON file
